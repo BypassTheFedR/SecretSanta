@@ -18,10 +18,10 @@ SecretSanta/
 │   ├── scheduler.py                # Logic for generating Secret Santa assignments
 │   └── utils.py                    # Helper functions (e.g., validation functions)
 ├── migrations/                     # Database migration files
-├── tests/
-│   ├── test_forms.py               # Tests for form validation
-│   ├── test_routes.py              # Tests for routes and response handling
-│   └── test_scheduler.py           # Tests for the assignment algorithm
+├── data/
+│   ├── families.csv	            # Tests for form validation
+│   ├── assignments.csv 	    # Tests for routes and response handling
+│   └── 		            # Tests for the assignment algorithm
 ├── .env                            # Environment variables (keep sensitive data here)
 ├── .gitignore                      # Git ignore file
 ├── README.md                       # Project documentation

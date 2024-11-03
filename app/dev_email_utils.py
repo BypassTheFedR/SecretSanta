@@ -1,18 +1,19 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from .config import Config
+from .config import Debug_Config
 
+# Debug copy of send_email
 def send_email(to_email: str, subject: str, body: str):
     try:
         # Set up the SMTP server
-        with smtplib.SMTP(Config.EMAIL_HOST, Config.EMAIL_PORT) as server:
-            server.starttls() # Start TLS encryption
-            server.login(Config.EMAIL_ADDRESS, Config.APP_PASSWORD)
+        with smtplib.SMTP(Debug_Config.EMAIL_HOST, Debug_Config.EMAIL_PORT) as server:
+            # server.starttls() # Start TLS encryption
+            # server.login(Debug_Config.EMAIL_ADDRESS, Debug_Config.APP_PASSWORD)
 
             # Create the email
             msg = MIMEMultipart()
-            msg["From"] = Config.EMAIL_ADDRESS
+            msg["From"] = Debug_Config.EMAIL_ADDRESS
             msg["To"] = to_email
             msg["Subject"] = subject
             msg.attach(MIMEText(body, "plain"))
@@ -22,27 +23,6 @@ def send_email(to_email: str, subject: str, body: str):
             print(f"Email send to {to_email}")
     except Exception as e:
         print(f"Failed to send email to {to_email}: {e}")
-
-# Debug copy of send_email
-# def send_email(to_email: str, subject: str, body: str):
-#     try:
-#         # Set up the SMTP server
-#         with smtplib.SMTP(Debug_Config.EMAIL_HOST, Debug_Config.EMAIL_PORT) as server:
-#             # server.starttls() # Start TLS encryption
-#             # server.login(Debug_Config.EMAIL_ADDRESS, Debug_Config.APP_PASSWORD)
-
-#             # Create the email
-#             msg = MIMEMultipart()
-#             msg["From"] = Debug_Config.EMAIL_ADDRESS
-#             msg["To"] = to_email
-#             msg["Subject"] = subject
-#             msg.attach(MIMEText(body, "plain"))
-
-#             # send the email
-#             server.send_message(msg)
-#             print(f"Email send to {to_email}")
-#     except Exception as e:
-#         print(f"Failed to send email to {to_email}: {e}")
 
 # Sends the pairings to the appropriate email.
 def send_assignments(assigned_adults, assigned_children, adult_pool, child_pool):
@@ -78,7 +58,7 @@ def send_assignments(assigned_adults, assigned_children, adult_pool, child_pool)
         # Group child assignments by family email
         if parent_email not in family_assignments:
             family_assignments[parent_email] = []
-        family_assignments[parent_email].append(f"{child_giver} is buying for {child_receiver}.")
+        family_assignments[parent_email].append(f"{child_giver} is buying for {child_receiver}")
 
      # Send one email per family for child assignments
     for parent_email, assignments in family_assignments.items():

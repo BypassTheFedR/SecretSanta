@@ -4,37 +4,18 @@ from fastapi.templating import Jinja2Templates
 from .models import FamilyParticipant
 from .scheduler import run_assignments
 from .email_utils import send_assignments
+# from .dev_email_utils import send_assignments
+from .csv_manager import save_families_to_csv, load_families_from_csv, save_assignments_to_csv, load_assignments_from_csv
 
 router = APIRouter()
 
 # Load Jinja2 Template
 templates = Jinja2Templates(directory="app/templates")
 
-# In-memory storage for testing
-# registered_families = {}
-registered_families = {
-  "chantalthornburg@gmail.com": {
-    "name": "serenity",
-    "spouse_name": "nick",
-    "spouse_email": "nick@mail.com",
-    "children": "Blake,Lyla"
-  },
-  "joshuarthornburg@gmail.com": {
-    "name": "josh",
-    "spouse_name": "chantal",
-    "spouse_email": "chantal@mail.com",
-    "children": "Ayden,Daphne,Chloe"
-  },
-  "chantaljenson@gmail.com": {
-    "name": "cate",
-    "spouse_name": "billy",
-    "spouse_email": "billy@mail.com",
-    "children": "Elizabeth,Rileigh,Junior"
-  }
-}
+# Load data from csv
+registered_families = load_families_from_csv()
+assigned_adults, assigned_children = load_assignments_from_csv()
 
-# assigned_adults = {}
-# assigned_children = {}
 # Using assigned dicinoaries as globals
 assigned_adults = None
 assigned_children = None
@@ -44,10 +25,13 @@ child_pool = None
 def populate_pools(registered_families):
     adult_pool = {}
     child_pool = {}
-
+    
     # Populate adult_pool with unique IDs for each person and spouse in one loop
     auto_increment_id = 1
     for key, value in registered_families.items():
+        # Debug: printing
+        print(f"Processing family: {key} -> {value}")
+
         # Add primary person
         adult_pool[auto_increment_id] = (value["name"], key, key)
         auto_increment_id += 1
@@ -57,15 +41,17 @@ def populate_pools(registered_families):
             auto_increment_id += 1
 
     auto_increment_id = 1
-
+    
     # Populate child_pool, ensuring each child has a unique ID
     for key, value in registered_families.items():
-        children = [child.strip() for child in value["children"].split(",")]
+        children = value["children"]
+        # children = [child.strip() for child in value["children"].split(",")]
         for child in children:
             child_pool[auto_increment_id] = (child, "null", key)
+            print(f"Added child {child} for  family {key} to child pool with ID {auto_increment_id}")
             auto_increment_id += 1
 
-        # Return the populated pools
+    # Return the populated pools
     return adult_pool, child_pool
 
 @router.get("/register/", response_class=HTMLResponse)
@@ -80,20 +66,25 @@ async def register_family(
     spouse_email: str = Form(None),
     children: str = Form(None)
 ):
+    # Check for existing registration based on email provided
     if email in registered_families:
         raise HTTPException(status_code=400, detail="Family already registered.")
     
     children_list = [child.strip() for child in children.split(",")] if children else []
     
-    # Store particpant dat a in memory
+    # Store particpant data a in memory
     registered_families[email] = {
         "name": name,
         "spouse_name": spouse_name,
         "spouse_email": spouse_email,
         "children": children_list
     }
-    # placeholder for saving particpant data
-    return {"message" : f"Family registration successful for {name}'s family"}
+
+    # Persist data to CSV
+    save_families_to_csv(registered_families)
+
+    # Return success message
+    return {"message" : f"Family registration successful for {name}'s family."}
 
 @router.post("/assignments/")
 @router.get("/assignments/")
@@ -102,12 +93,14 @@ async def generate_assignments():
     try:
         if not registered_families:
             raise HTTPException(status_code=400, detail="No families registered.")
-        
+
         # Use populate_pools to create adult_pool and child_pool
         adult_pool, child_pool = populate_pools(registered_families)
+        print(adult_pool)
 
         # Generate assignments for adults and children
         assigned_adults, assigned_children = run_assignments(adult_pool, child_pool)
+        save_assignments_to_csv(assigned_adults, assigned_children)
 
         # Redirect to send_emails_page for confirmation
         return RedirectResponse(url=f"/send_emails_page", status_code=303)
