@@ -1,0 +1,34 @@
+SecretSanta/
+├── app/
+│   ├── static/
+│   │   ├── css/                    # Stylesheets for styling the website
+│   │   ├── js/                     # JavaScript for frontend form validation, etc.
+│   │   └── images/                 # Any images or icons used in the website
+│   ├── templates/
+│   │   ├── admin/
+│   │   │   ├── admin_home.html     # Admin dashboard to run pool and preview lists
+│   │   │   ├── preview.html        # Page to view lists before sending emails
+│   │   └── secret_santa_form.html  # Form for users to submit their information
+│   ├── __init__.py                 # Initializes the app as a package
+│   ├── config.py                   # Configuration settings (e.g., email credentials)
+│   ├── email_utils.py              # Module to handle email notifications
+│   ├── forms.py                    # Form validation and structure
+│   ├── models.py                   # Defines database models (Participants, Groups, etc.)
+│   ├── routes.py                   # URL routes and associated backend logic
+│   ├── scheduler.py                # Logic for generating Secret Santa assignments
+│   └── utils.py                    # Helper functions (e.g., validation functions)
+├── migrations/                     # Database migration files
+├── tests/
+│   ├── test_forms.py               # Tests for form validation
+│   ├── test_routes.py              # Tests for routes and response handling
+│   └── test_scheduler.py           # Tests for the assignment algorithm
+├── .env                            # Environment variables (keep sensitive data here)
+├── .gitignore                      # Git ignore file
+├── README.md                       # Project documentation
+├── requirements.txt                # Python dependencies
+└── main.py                          # Entry point for running the application
+
+
+# Activating the virtual environment
+From the SecretSanta folder
+> .\venv\Scripts\activate

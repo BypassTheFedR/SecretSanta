@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Secret Santa Admin</title>
+        <link rel="stylesheet" href="/static/css/styles.css">
+    </head>
+<body>
+    <h1>Secret Santa Admin</h1>
+
+    <!-- Display error message if present -->
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    
+    <!-- Display success message if present -->
+    {% if success_message %}
+        <p style="color: green;">{{ success_message }}</p>
+    {% endif %}
+
+    <form action="/assignments/" method="post">
+        <button type="submit">Generate Assignments</button>
+    </form>
+</body>
+</html>

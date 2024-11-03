@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Secret Santa Registration</title>
+        <link rel="stylesheet" href="/static/css/styles.css">
+    </head>
+<body>
+    <h1>Secret Santa Registration</h1>
+    <form action="/register/" method="post">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        
+        <label for="spouse_name">Spouse or SO Name:</label>
+        <input type="text" id="spouse_name" name="spouse_name"><br>
+
+        <label for="spouse_name">Spouse or SO Email:</label>
+        <input type="email" id="spouse_email" name="spouse_email"><br>
+
+        <label for="children">Kids names (separate by comma(e.g. Ayden, Daphne, Chloe)):</label>
+        <input type="text" id="children" name="children"><br>
+
+        <button type="Submit">Submit</button>
+    </form>
+</body>
+</html>

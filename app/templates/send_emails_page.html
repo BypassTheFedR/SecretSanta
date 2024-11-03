@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Assignments</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    {% if request.query_params.get("success") == "assignments_generated" %}
+        <p style="color:green;">Assignments successfully generated! Review them below and click to send emails.</p>
+    {% endif %}
+
+    <h1>Confirm Assignments</h1>
+    <p>Review the Secret Santa pairings below:</p>
+
+    <h2>Adult Assignments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th aligned="left">Secret Santa</th>
+                <th>Recipient</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for secret_santa, recipient in assigned_adults.items() %}
+            <tr>
+                <td>{{ secret_santa }}</td>
+                <td>{{ recipient }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Child Assignments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Secret Santa</th>
+                <th>Recipient</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for secret_santa, recipient in assigned_children.items() %}
+            <tr>
+                <td>{{ secret_santa }}</td>
+                <td>{{ recipient }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form action="/send_emails/" method="post">
+        <input type="hidden" name="adults" value='{{ assigned_adults | tojson | safe }}'>
+        <input type="hidden" name="children" value='{{ assigned_children | tojson | safe }}'>
+        <button type="submit">Send Emails</button>
+    </form>
+</body>
+</html>

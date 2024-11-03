@@ -1,0 +1,41 @@
+Secret Santa Website Requirements
+1. Participant Types
+Two Groups:
+Adults: Each adult participant is part of the "Adults" group.
+Children: Each child participant is part of the "Children" group.
+2. Participant Entry Forms
+Adults Form:
+A form where one adult (e.g., a parent) enters:
+Their own name and email.
+Their spouse’s name and email.
+Children Form:
+A form where a parent enters:
+Their name and email.
+Names of each child they are registering.
+The parent’s email will receive notifications for their children’s assignments.
+3. Assignment Rules
+Adults Group:
+Ensure that spouses cannot be assigned to each other.
+Children Group:
+Ensure that siblings cannot be assigned to each other.
+4. Admin Features
+Admin Page:
+Run Pool: Allows the administrator to generate the Secret Santa assignments once all participants are registered.
+Preview Assignments: On a separate page, the administrator can view the generated Secret Santa lists for both adults and children before any emails are sent.
+Send Notifications: After previewing and confirming the lists, the administrator can trigger email notifications to be sent out to participants.
+5. Notifications
+Email Notifications:
+Adults: Each adult receives an individual email notifying them who they have been assigned.
+Children: The parent who registered the children will receive a single email with each child’s assignment.
+6. Technical Requirements
+Frontend:
+HTML/CSS with JavaScript for form validation.
+Responsive design to ensure usability on mobile devices.
+Backend:
+Use a framework like Flask (Python) or Node.js for handling form submissions, assignment generation, and email notifications.
+Database:
+Store participant information (e.g., names, emails, group type) in a database such as SQLite or MongoDB.
+Security:
+Authentication for the admin page to prevent unauthorized access.
+Email Service:
+Use an email service (e.g., SendGrid) or SMTP server to handle outgoing emails.
